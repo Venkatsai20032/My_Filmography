@@ -1,0 +1,524 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Filmography | Cinematic Creative Showcase</title>
+  <meta name="description" content="Cinematic portfolio showcasing filmmaking, acting, directing, cinematography, and creative cinema works.">
+  
+  <!-- Google Fonts & Stylesheet -->
+  <link rel="stylesheet" href="css/style.css">
+  
+  <!-- FontAwesome Icons for Cinema & Socials -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+</head>
+<body>
+
+  <!-- ==========================================================================
+       TOP HEADER - Clean with Right Title "My Filmography" & Discreet Super Login
+       ========================================================================== -->
+  <header class="portfolio-header" id="portfolioHeader">
+    <div class="header-container">
+      <div class="header-right-title">
+        <span class="portfolio-title-text" id="portfolioTitle">My Filmography</span>
+        <button type="button" id="btnSuperLoginTrigger" class="super-lock-btn" title="Super Admin Login" aria-label="Super Admin Login">
+          <i class="fa-solid fa-lock" id="superLockIcon"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ==========================================================================
+       SUPER STUDIO BAR (Hidden by default; Revealed ONLY after Super Login)
+       ========================================================================== -->
+  <div class="studio-bar admin-studio-bar" id="adminStudioBar" style="display:none;" aria-label="Studio Admin Controls">
+    <div class="studio-brand">
+      <span class="studio-badge"><i class="fa-solid fa-shield-halved"></i> Super Studio</span>
+      <div class="mode-toggle-group">
+        <button type="button" id="btnModeEdit" class="mode-btn active" title="Switch to Studio Edit Mode">
+          <i class="fa-solid fa-pen-to-square"></i> Edit Mode
+        </button>
+        <button type="button" id="btnModeView" class="mode-btn" title="Preview public portfolio showcase">
+          <i class="fa-solid fa-eye"></i> Showcase View
+        </button>
+      </div>
+    </div>
+
+    <div class="studio-actions">
+      <button type="button" id="btnSaveData" class="btn-cinema btn-primary" title="Save changes safely">
+        <i class="fa-solid fa-floppy-disk"></i> Save Changes
+      </button>
+      <button type="button" id="btnExportData" class="btn-cinema btn-ghost" title="Backup / Download Portfolio JSON">
+        <i class="fa-solid fa-file-arrow-down"></i> Backup JSON
+      </button>
+      <button type="button" id="btnImportData" class="btn-cinema btn-ghost" title="Restore Portfolio from JSON">
+        <i class="fa-solid fa-file-arrow-up"></i> Restore
+      </button>
+      <input type="file" id="importJsonFileInput" accept=".json" style="display:none;">
+      <button type="button" id="btnResetData" class="btn-cinema btn-ghost" title="Reset to sample demo data">
+        <i class="fa-solid fa-arrow-rotate-left"></i> Reset
+      </button>
+      <button type="button" id="btnSuperLogout" class="btn-cinema btn-danger" title="Exit Admin and Lock Portfolio">
+        <i class="fa-solid fa-right-from-bracket"></i> Logout
+      </button>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       MAIN CONTENT WRAPPER
+       ========================================================================== -->
+  <main class="main-wrapper">
+
+    <!-- ========================================================================
+         SECTION 1: MAIN PROFILE DETAILS
+         ======================================================================== -->
+    <section class="profile-section-grid" id="profileDetailsSection">
+
+      <!-- LEFT COLUMN (Avatar, Status, P1/P2/P3, Contact & Socials) -->
+      <div class="profile-left-col">
+
+        <!-- Main 1: Profile Picture (Circular Display) -->
+        <div class="profile-avatar-container" id="avatarContainer">
+          <img src="" alt="Profile Picture" id="avatarImg" class="profile-avatar-img" style="display:none;">
+          <div class="avatar-placeholder" id="avatarPlaceholder">
+            <svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+          </div>
+          <div class="avatar-edit-overlay" id="avatarEditTrigger" title="Click to change profile picture">
+            <i class="fa-solid fa-camera fa-lg"></i>
+            <span style="font-size: 0.72rem; font-weight: 700;">CHANGE PHOTO</span>
+          </div>
+        </div>
+
+        <!-- Avatar Controls (Edit Mode) -->
+        <div class="avatar-controls-panel edit-only">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <label style="font-weight:700; font-size:0.78rem;">Profile Picture</label>
+            <button type="button" id="btnClearAvatar" class="btn-cinema btn-ghost" style="padding:2px 6px; font-size:0.7rem;">Clear</button>
+          </div>
+          <input type="file" id="avatarFileInput" accept="image/*" class="cinema-input" style="font-size:0.75rem; padding:4px;">
+          <input type="url" id="avatarUrlInput" class="cinema-input" placeholder="Or enter Image URL..." style="font-size:0.75rem;">
+          <div style="display:flex; gap:6px; align-items:center; margin-top:2px;">
+            <span style="font-size:0.7rem; color:var(--text-muted);">Zoom:</span>
+            <input type="range" id="avatarScaleRange" min="70" max="180" value="100" style="flex:1;">
+          </div>
+          <div style="display:flex; gap:6px; align-items:center; margin-top:2px;">
+            <span style="font-size:0.7rem; color:var(--text-muted);">Position:</span>
+            <input type="range" id="avatarOffsetRange" min="0" max="100" value="50" style="flex:1;">
+          </div>
+        </div>
+
+        <!-- Main 2: Status Box Badge -->
+        <div class="status-badge-wrapper">
+          <div class="status-badge" id="statusBadgeDisplay">
+            <span class="status-pulse-dot" id="statusDot"></span>
+            <span id="statusText">Active 🟢</span>
+          </div>
+          <div class="edit-only" style="margin-top: 8px;">
+            <select id="statusSelect" class="cinema-select">
+              <option value="Active">Active 🟢</option>
+              <option value="Currently Unavailable">Currently Unavailable 🔴</option>
+              <option value="Weekdays">Weekdays 🟡</option>
+              <option value="Weekends">Weekends 🟣</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Main 3: P1, P2, P3 Portfolio Images with Adjustable Tools -->
+        <div style="width: 100%;">
+          <div class="portfolio-triplet-box" id="portfolioTripletBox">
+            <!-- Cell P1 -->
+            <div class="portfolio-cell" id="pCell1" data-index="1" title="Click to upload/replace P1">
+              <span class="portfolio-cell-label" id="pLabel1">P1</span>
+              <img src="" alt="P1 Portfolio" class="portfolio-cell-img" id="pImg1" style="display:none;">
+              <div class="cell-actions-overlay">
+                <button type="button" class="cell-btn" data-action="upload" data-index="1" title="Upload Image"><i class="fa-solid fa-upload"></i></button>
+                <button type="button" class="cell-btn" data-action="clear" data-index="1" title="Clear Image"><i class="fa-solid fa-trash"></i></button>
+              </div>
+            </div>
+            <!-- Cell P2 -->
+            <div class="portfolio-cell" id="pCell2" data-index="2" title="Click to upload/replace P2">
+              <span class="portfolio-cell-label" id="pLabel2">P2</span>
+              <img src="" alt="P2 Portfolio" class="portfolio-cell-img" id="pImg2" style="display:none;">
+              <div class="cell-actions-overlay">
+                <button type="button" class="cell-btn" data-action="upload" data-index="2" title="Upload Image"><i class="fa-solid fa-upload"></i></button>
+                <button type="button" class="cell-btn" data-action="clear" data-index="2" title="Clear Image"><i class="fa-solid fa-trash"></i></button>
+              </div>
+            </div>
+            <!-- Cell P3 -->
+            <div class="portfolio-cell" id="pCell3" data-index="3" title="Click to upload/replace P3">
+              <span class="portfolio-cell-label" id="pLabel3">P3</span>
+              <img src="" alt="P3 Portfolio" class="portfolio-cell-img" id="pImg3" style="display:none;">
+              <div class="cell-actions-overlay">
+                <button type="button" class="cell-btn" data-action="upload" data-index="3" title="Upload Image"><i class="fa-solid fa-upload"></i></button>
+                <button type="button" class="cell-btn" data-action="clear" data-index="3" title="Clear Image"><i class="fa-solid fa-trash"></i></button>
+              </div>
+            </div>
+          </div>
+          <input type="file" id="pTripletFileInput" accept="image/*" style="display:none;">
+          <div class="edit-only" style="margin-top:6px; font-size:0.75rem; color:var(--text-muted); text-align:center;">
+            Click any cell (P1, P2, P3) to upload or replace image.
+          </div>
+
+          <!-- Sub-profiles Adjustment Tools (Zoom & Clear) -->
+          <div class="edit-only" style="margin-top:8px; background:var(--bg-card); padding:10px; border-radius:var(--radius-sm); border:1px solid var(--border-subtle); display:flex; flex-direction:column; gap:6px;">
+            <div style="font-size:0.75rem; font-weight:700; color:var(--text-primary); margin-bottom:2px;">
+              <i class="fa-solid fa-sliders"></i> Sub-Profile Adjustments:
+            </div>
+            <div style="display:flex; gap:8px; align-items:center;">
+              <span style="font-size:0.72rem; color:var(--text-muted); width:24px;">P1:</span>
+              <input type="range" id="p1ScaleRange" min="70" max="200" value="100" style="flex:1;" title="Adjust P1 Zoom">
+              <button type="button" class="btn-cinema btn-ghost" data-action="clear-p" data-index="1" style="padding:2px 6px; font-size:0.68rem;">Clear</button>
+            </div>
+            <div style="display:flex; gap:8px; align-items:center;">
+              <span style="font-size:0.72rem; color:var(--text-muted); width:24px;">P2:</span>
+              <input type="range" id="p2ScaleRange" min="70" max="200" value="100" style="flex:1;" title="Adjust P2 Zoom">
+              <button type="button" class="btn-cinema btn-ghost" data-action="clear-p" data-index="2" style="padding:2px 6px; font-size:0.68rem;">Clear</button>
+            </div>
+            <div style="display:flex; gap:8px; align-items:center;">
+              <span style="font-size:0.72rem; color:var(--text-muted); width:24px;">P3:</span>
+              <input type="range" id="p3ScaleRange" min="70" max="200" value="100" style="flex:1;" title="Adjust P3 Zoom">
+              <button type="button" class="btn-cinema btn-ghost" data-action="clear-p" data-index="3" style="padding:2px 6px; font-size:0.68rem;">Clear</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Main 4 & 5: Mobile Number & Email ID -->
+        <div class="profile-contact-meta">
+          <div class="contact-meta-row">
+            <span class="meta-label">MOBILE NUMBER:</span>
+            <span class="meta-val-text view-only" id="mobileDisplay">+91 98765 43210</span>
+            <input type="tel" id="mobileInput" class="cinema-input edit-only" placeholder="+91 98765 43210">
+          </div>
+
+          <div class="contact-meta-row">
+            <span class="meta-label">EMAIL ID:</span>
+            <span class="meta-val-text view-only" id="emailDisplay">cinema.creator@example.com</span>
+            <input type="email" id="emailInput" class="cinema-input edit-only" placeholder="cinema.creator@example.com">
+          </div>
+        </div>
+
+        <!-- Main 6: Social Networks (Instagram, Facebook, WhatsApp, YouTube, X) -->
+        <div class="social-network-section">
+          <span class="meta-label">SOCIAL NETWORK</span>
+          <div class="social-icons-row" id="socialLinksContainer">
+            <!-- Instagram -->
+            <a href="#" target="_blank" rel="noopener noreferrer" class="social-icon-item" id="socialLinkInstagram">
+              <span class="social-icon-circle instagram"><i class="fa-brands fa-instagram"></i></span>
+              <span class="view-only" id="socialTextInstagram">Instagram</span>
+            </a>
+            <input type="url" id="socialInputInstagram" class="cinema-input edit-only" placeholder="Instagram URL...">
+
+            <!-- Facebook -->
+            <a href="#" target="_blank" rel="noopener noreferrer" class="social-icon-item" id="socialLinkFacebook">
+              <span class="social-icon-circle facebook"><i class="fa-brands fa-facebook-f"></i></span>
+              <span class="view-only" id="socialTextFacebook">Facebook</span>
+            </a>
+            <input type="url" id="socialInputFacebook" class="cinema-input edit-only" placeholder="Facebook Profile / Page URL...">
+
+            <!-- WhatsApp -->
+            <a href="#" target="_blank" rel="noopener noreferrer" class="social-icon-item" id="socialLinkWhatsapp">
+              <span class="social-icon-circle whatsapp"><i class="fa-brands fa-whatsapp"></i></span>
+              <span class="view-only" id="socialTextWhatsapp">WhatsApp</span>
+            </a>
+            <input type="url" id="socialInputWhatsapp" class="cinema-input edit-only" placeholder="WhatsApp URL / wa.me link...">
+
+            <!-- YouTube -->
+            <a href="#" target="_blank" rel="noopener noreferrer" class="social-icon-item" id="socialLinkYoutube">
+              <span class="social-icon-circle youtube"><i class="fa-brands fa-youtube"></i></span>
+              <span class="view-only" id="socialTextYoutube">YouTube</span>
+            </a>
+            <input type="url" id="socialInputYoutube" class="cinema-input edit-only" placeholder="YouTube Channel URL...">
+
+            <!-- X (Twitter) -->
+            <a href="#" target="_blank" rel="noopener noreferrer" class="social-icon-item" id="socialLinkX">
+              <span class="social-icon-circle x"><i class="fa-brands fa-x-twitter"></i></span>
+              <span class="view-only" id="socialTextX">X (Twitter)</span>
+            </a>
+            <input type="url" id="socialInputX" class="cinema-input edit-only" placeholder="X (Twitter) profile URL...">
+          </div>
+        </div>
+
+        <!-- Main 7: Username -->
+        <div class="contact-meta-row" style="width: 100%;">
+          <span class="meta-label">USERNAME:</span>
+          <span class="meta-val-text view-only" id="usernameDisplay">@thota_venkat_sai</span>
+          <input type="text" id="usernameInput" class="cinema-input edit-only" placeholder="e.g. thota_venkat_sai">
+        </div>
+
+      </div>
+
+      <!-- RIGHT COLUMN (Name, Gender, DOB/Age, Category, State, City, Place, Interests, Genres, Types, Experience, Languages, Availability) -->
+      <div class="profile-right-col">
+
+        <!-- Main 8: Name -->
+        <div class="profile-field-row">
+          <span class="field-label">NAME :</span>
+          <div class="field-value-display view-only" id="nameDisplay" style="font-size:1.6rem; font-family:var(--font-display); letter-spacing:1.5px;">
+            Thota Venkat Sai
+          </div>
+          <input type="text" id="nameInput" class="cinema-input edit-only" placeholder="Enter Full Display Name..." style="font-size:1.1rem; font-weight:700;">
+        </div>
+
+        <!-- Main 9: Gender -->
+        <div class="profile-field-row">
+          <span class="field-label">GENDER:</span>
+          <div class="field-value-display view-only" id="genderDisplay">Male</div>
+          <div class="edit-only is-flex" style="display:flex; gap:16px; align-items:center;">
+            <label style="cursor:pointer; display:flex; align-items:center; gap:6px;">
+              <input type="radio" name="genderRadio" value="Male" checked> Male
+            </label>
+            <label style="cursor:pointer; display:flex; align-items:center; gap:6px;">
+              <input type="radio" name="genderRadio" value="Female"> Female
+            </label>
+            <label style="cursor:pointer; display:flex; align-items:center; gap:6px;">
+              <input type="radio" name="genderRadio" value="Others"> Others
+            </label>
+          </div>
+        </div>
+
+        <!-- Main 10: Age & DoB -->
+        <div class="profile-field-row">
+          <span class="field-label">DOB:</span>
+          <div class="field-value-display view-only" id="dobDisplay">05-12-2002 (Age: 23)</div>
+          <div class="edit-only is-flex" style="display:flex; gap:12px; align-items:center; width:100%;">
+            <input type="date" id="dobInput" class="cinema-input" style="flex:1;">
+            <input type="text" id="ageInput" class="cinema-input" placeholder="Age (e.g. 23)" style="width:110px;">
+          </div>
+        </div>
+
+        <!-- Main 11: Category (Suggestion chips with multi-select) -->
+        <div class="profile-field-row">
+          <span class="field-label">CATEGORY:</span>
+          <div class="field-value-display view-only" id="categoryDisplay">
+            <span class="tag-chip">Director</span>
+            <span class="tag-chip">Actor</span>
+            <span class="tag-chip">Screenwriter</span>
+          </div>
+          <div class="tag-picker-wrap edit-only" id="categoryTagPicker">
+            <!-- Suggestions & active tags dynamically populated -->
+          </div>
+        </div>
+
+        <!-- Main 12: State (Indian States/UTs Autocomplete) -->
+        <div class="profile-field-row">
+          <span class="field-label">STATE:</span>
+          <div class="field-value-display view-only" id="stateDisplay">Andhra Pradesh</div>
+          <div class="edit-only" style="width:100%;">
+            <input type="text" id="stateInput" list="statesDataList" class="cinema-input" placeholder="Select or type State...">
+            <datalist id="statesDataList"></datalist>
+          </div>
+        </div>
+
+        <!-- Main 13: City (Major Indian Cities Autocomplete) -->
+        <div class="profile-field-row">
+          <span class="field-label">CITY:</span>
+          <div class="field-value-display view-only" id="cityDisplay">Tirupati</div>
+          <div class="edit-only" style="width:100%;">
+            <input type="text" id="cityInput" list="citiesDataList" class="cinema-input" placeholder="Select or type City...">
+            <datalist id="citiesDataList"></datalist>
+          </div>
+        </div>
+
+        <!-- Main 14: Place (Locality/Studio) -->
+        <div class="profile-field-row">
+          <span class="field-label">PLACE:</span>
+          <div class="field-value-display view-only" id="placeDisplay">Tirupati</div>
+          <input type="text" id="placeInput" class="cinema-input edit-only" placeholder="Locality, Neighborhood, or Studio...">
+        </div>
+
+        <!-- Main 15: Area of Interest (Multi-select tags) -->
+        <div class="profile-field-row">
+          <span class="field-label">AREA OF INTEREST:</span>
+          <div class="field-value-display view-only" id="interestDisplay"></div>
+          <div class="tag-picker-wrap edit-only" id="interestTagPicker"></div>
+        </div>
+
+        <!-- Main 16: Interested Genre (Multi-select tags) -->
+        <div class="profile-field-row">
+          <span class="field-label">INTERESTED GENRE:</span>
+          <div class="field-value-display view-only" id="genreDisplay"></div>
+          <div class="tag-picker-wrap edit-only" id="genreTagPicker"></div>
+        </div>
+
+        <!-- Main 17: Interested Type (Multi-select tags) -->
+        <div class="profile-field-row">
+          <span class="field-label">INTERESTED TYPE:</span>
+          <div class="field-value-display view-only" id="typeDisplay"></div>
+          <div class="tag-picker-wrap edit-only" id="typeTagPicker"></div>
+        </div>
+
+        <!-- Main 18: Experience in Industry -->
+        <div class="profile-field-row">
+          <span class="field-label">EXPERIENCE:</span>
+          <div class="field-value-display view-only" id="experienceDisplay">3 Years</div>
+          <input type="text" id="experienceInput" class="cinema-input edit-only" placeholder="e.g. 3 Years or Project count...">
+        </div>
+
+        <!-- Main 19: Languages Known (Tags) -->
+        <div class="profile-field-row">
+          <span class="field-label">LANGUAGES KNOWN:</span>
+          <div class="field-value-display view-only" id="languageDisplay"></div>
+          <div class="tag-picker-wrap edit-only" id="languageTagPicker"></div>
+        </div>
+
+        <!-- Main 20: Availability -->
+        <div class="profile-field-row">
+          <span class="field-label">AVAILABILITY:</span>
+          <div class="field-value-display view-only" id="availabilityDisplay">Active</div>
+          <div class="edit-only" style="width:100%;">
+            <select id="availabilitySelect" class="cinema-select">
+              <option value="Active">Active (Available full-time)</option>
+              <option value="Currently Unavailable">Currently Unavailable</option>
+              <option value="Weekdays">Weekdays Only</option>
+              <option value="Weekends">Weekends Only</option>
+            </select>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ========================================================================
+         SECTION 2: PROFILE SUMMARY
+         ======================================================================== -->
+    <section class="summary-section-wrap" id="profileSummarySection">
+      <h2 class="cinematic-section-heading">PROFILE SUMMARY</h2>
+
+      <div class="summary-cards-container">
+
+        <!-- Bio / Summary Box (0 - 700 chars) -->
+        <div class="summary-card">
+          <div class="summary-card-header">
+            <span class="summary-card-title"><i class="fa-solid fa-quote-left"></i> About & Creative Bio</span>
+            <span class="char-counter" id="bioCounter">0 / 700 chars</span>
+          </div>
+          <div class="summary-text-display view-only" id="bioDisplay"></div>
+          <textarea id="bioInput" class="cinema-textarea edit-only" maxlength="700" placeholder="Write your cinematic bio, experience, and artistic vision (0-700 characters)..."></textarea>
+        </div>
+
+        <!-- Thing You Need / Motive Box (0 - 300 chars) -->
+        <div class="summary-card">
+          <div class="summary-card-header">
+            <span class="summary-card-title"><i class="fa-solid fa-bullseye"></i> Thing You Need / Motive</span>
+            <span class="char-counter" id="motiveCounter">0 / 300 chars</span>
+          </div>
+          <div class="summary-text-display view-only" id="motiveDisplay"></div>
+          <textarea id="motiveInput" class="cinema-textarea edit-only" maxlength="300" placeholder="State your immediate career goal, collaborative requirement, or motive (0-300 characters)..."></textarea>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- ========================================================================
+         SECTION 3: PROJECT INFORMATION & OVERVIEW
+         ======================================================================== -->
+    <section class="projects-section-wrap" id="projectOverviewSection">
+
+      <!-- Header: No of Project & Type of Projects -->
+      <div class="project-stats-header">
+        <div class="profile-field-row">
+          <span class="field-label">NO OF PROJECT:</span>
+          <div class="field-value-display view-only" id="noOfProjectsDisplay">01</div>
+          <input type="text" id="noOfProjectsInput" class="cinema-input edit-only" placeholder="e.g. 01" style="max-width:140px;">
+        </div>
+
+        <div class="profile-field-row">
+          <span class="field-label">TYPE OF PROJECTS:</span>
+          <div class="field-value-display view-only" id="typeOfProjectsDisplay"></div>
+          <div class="tag-picker-wrap edit-only" id="typeOfProjectsTagPicker"></div>
+        </div>
+      </div>
+
+      <!-- Subtitle: Overview & Filter Tabs -->
+      <div class="overview-heading-row">
+        <h3 class="overview-title">Overview</h3>
+        <div class="filter-tabs-row" id="projectFilterTabs">
+          <button type="button" class="filter-tab-btn active" data-filter="All">All</button>
+          <button type="button" class="filter-tab-btn" data-filter="Web series">Webseries</button>
+          <button type="button" class="filter-tab-btn" data-filter="Short-series">Short-Series</button>
+          <button type="button" class="filter-tab-btn" data-filter="Short films">Short-films</button>
+          <button type="button" class="filter-tab-btn" data-filter="Movies">Movies</button>
+          <button type="button" class="filter-tab-btn" data-filter="Reels">Reels</button>
+          <button type="button" class="filter-tab-btn" data-filter="Cover songs">Coversongs</button>
+        </div>
+      </div>
+
+      <!-- Dynamic Project Cards Container -->
+      <div class="projects-container" id="projectsContainer">
+        <!-- Rendered dynamically by JavaScript -->
+      </div>
+
+      <!-- Add New Project Button -->
+      <div class="add-project-wrap edit-only">
+        <button type="button" class="btn-add-project" id="btnAddNewProject">
+          <i class="fa-solid fa-plus-circle"></i> ADD NEW PROJECT
+        </button>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- ==========================================================================
+       SUPER ADMIN LOGIN MODAL
+       ========================================================================== -->
+  <div class="cinema-modal-backdrop" id="superLoginModal" style="display:none;">
+    <div class="super-login-card">
+      <button type="button" class="modal-close-btn" id="btnCloseSuperLogin" aria-label="Close Login">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      <div class="login-header-icon">
+        <i class="fa-solid fa-shield-halved"></i>
+      </div>
+      <h3 class="login-title">SUPER ADMIN LOGIN</h3>
+      <p class="login-subtitle">Enter passcode to unlock Studio Edit & Management Controls</p>
+      
+      <form id="superLoginForm" autocomplete="off" onsubmit="return false;">
+        <div class="login-input-group">
+          <i class="fa-solid fa-key input-icon"></i>
+          <input type="password" id="superPasscodeInput" class="cinema-input login-input" placeholder="Enter Super Passcode..." required>
+          <button type="button" id="btnTogglePasscodeVisibility" class="btn-eye" aria-label="Show Passcode">
+            <i class="fa-solid fa-eye" id="eyeIcon"></i>
+          </button>
+        </div>
+        <p class="login-error-msg" id="loginErrorMsg" style="display:none; color:#ff333d; font-size:0.82rem; margin-top:8px; font-weight:600; text-align:center;"></p>
+        <p class="login-hint"><i class="fa-solid fa-circle-info"></i> Default passcode: <strong>venkat2026</strong> (or admin123)</p>
+        <div class="login-actions">
+          <button type="submit" id="btnSubmitSuperLogin" class="btn-cinema btn-primary btn-block">
+            <i class="fa-solid fa-unlock-keyhole"></i> Unlock Studio
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       LIGHTBOX MODAL (For previewing images in high resolution)
+       ========================================================================== -->
+  <div class="cinema-modal-backdrop" id="imageLightboxModal">
+    <div style="position:relative; max-width:90vw; max-height:90vh; display:flex; flex-direction:column; align-items:center;">
+      <button type="button" class="modal-close-btn" id="btnCloseLightbox" style="position:absolute; top:-38px; right:0; font-size:2rem;">
+        <i class="fa-solid fa-xmark"></i>
+      </button>
+      <img src="" alt="Fullscreen Preview" id="lightboxImage" class="lightbox-img-view">
+    </div>
+  </div>
+
+  <!-- Toast Notification Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Footer with Download as PDF -->
+  <footer class="cinema-footer">
+    <div style="margin-bottom: 18px;">
+      <button type="button" id="btnDownloadPdf" class="btn-cinema btn-primary" style="font-size:0.95rem; padding: 10px 24px; cursor:pointer; box-shadow: 0 4px 15px rgba(220, 20, 30, 0.4);">
+        <i class="fa-solid fa-file-pdf"></i> Download as PDF
+      </button>
+    </div>
+    <p>&copy; <span id="currentYear"></span> My Filmography. Built for cinema creators.</p>
+  </footer>
+
+  <!-- Scripts -->
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
