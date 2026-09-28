@@ -174,28 +174,28 @@ document.addEventListener("DOMContentLoaded", async () => {
       merged.projectHeader = { ...merged.projectHeader, ...source.projectHeader };
     }
 
-    // Merge projects
-    if (Array.isArray(source.projects) && source.projects.length > 0) {
-      merged.projects = source.projects.map(prj => {
-        // Ensure webseries projects have valid episodes list
-        if (prj.type === "Web series" || prj.type === "Short-series") {
-          if (!prj.episodes || prj.episodes.length === 0) {
-            prj.episodes = [
-              {
-                id: "ep-" + Date.now(),
-                episodeNo: "01",
-                title: prj.title ? `${prj.title} - Episode 1` : "Episode 1",
-                role: prj.role || "Director",
-                type: prj.type || "Web series",
-                storyline: prj.storyline || "",
-                link: prj.link || "",
-                releaseYear: prj.releaseYear || "2026",
-                thumbnail: prj.thumbnail || ""
-              }
-            ];
-          }
+    // Merge projects: preserve any user edits and photos, while ensuring all 10 default projects are loaded
+    if (Array.isArray(defaults.projects)) {
+      merged.projects = defaults.projects.map(defPrj => {
+        const userPrj = (source.projects || []).find(p => p.id === defPrj.id || p.number === defPrj.number);
+        if (userPrj) {
+          return {
+            ...defPrj,
+            ...userPrj,
+            // Keep default storyline, link, and episodes if user hasn't customized them
+            link: userPrj.link || defPrj.link,
+            storyline: userPrj.storyline || defPrj.storyline,
+            episodes: (userPrj.episodes && userPrj.episodes.length > 0) ? userPrj.episodes : defPrj.episodes
+          };
         }
-        return prj;
+        return defPrj;
+      });
+
+      // Also append any extra custom projects user created beyond the 10
+      (source.projects || []).forEach(p => {
+        if (!merged.projects.some(m => m.id === p.id || m.number === p.number)) {
+          merged.projects.push(p);
+        }
       });
     }
 
