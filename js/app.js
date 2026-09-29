@@ -1098,30 +1098,49 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     function openSuperLoginModal() {
       if (superLoginModal) {
+        superLoginModal.classList.add("open");
         superLoginModal.style.display = "flex";
+        superLoginModal.style.opacity = "1";
+        superLoginModal.style.pointerEvents = "auto";
         if (loginErrorMsg) loginErrorMsg.style.display = "none";
         if (superPasscodeInput) {
           superPasscodeInput.value = "";
-          setTimeout(() => superPasscodeInput.focus(), 100);
+          setTimeout(() => superPasscodeInput.focus(), 150);
         }
       }
     }
 
     function closeSuperLoginModal() {
       if (superLoginModal) {
+        superLoginModal.classList.remove("open");
         superLoginModal.style.display = "none";
+        superLoginModal.style.opacity = "0";
+        superLoginModal.style.pointerEvents = "none";
       }
     }
 
-    if (btnSuperLoginTrigger) {
-      btnSuperLoginTrigger.addEventListener("click", () => {
-        if (isSuperAdmin) {
-          if (confirm("You are currently logged in as Super Admin. Do you want to logout and lock the portfolio?")) {
-            logoutSuperAdmin();
-          }
-          return;
+    function handleTriggerSuperLogin() {
+      if (isSuperAdmin) {
+        if (confirm("You are currently logged in as Super Admin. Do you want to logout and lock the portfolio?")) {
+          logoutSuperAdmin();
         }
-        openSuperLoginModal();
+        return;
+      }
+      openSuperLoginModal();
+    }
+
+    if (btnSuperLoginTrigger) {
+      btnSuperLoginTrigger.addEventListener("click", (e) => {
+        e.stopPropagation();
+        handleTriggerSuperLogin();
+      });
+    }
+
+    const headerRightBadge = document.querySelector(".header-right-title");
+    if (headerRightBadge) {
+      headerRightBadge.style.cursor = "pointer";
+      headerRightBadge.addEventListener("click", () => {
+        handleTriggerSuperLogin();
       });
     }
 

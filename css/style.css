@@ -306,8 +306,24 @@ body::before {
   display: flex;
   flex-direction: column;
   align-items: center;
-  text-align: center;
   animation: modalPop 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.super-login-card .modal-close-btn {
+  position: absolute;
+  top: 14px;
+  right: 18px;
+  color: var(--text-muted);
+  font-size: 1.4rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.super-login-card .modal-close-btn:hover {
+  color: #ff333d;
+  transform: scale(1.15);
 }
 
 @keyframes modalPop {
@@ -1543,21 +1559,22 @@ body::before {
 .cinema-modal-backdrop {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.88);
-  backdrop-filter: blur(12px);
-  z-index: 2000;
-  display: flex;
+  background: rgba(0, 0, 0, 0.9);
+  backdrop-filter: blur(14px);
+  z-index: 99999;
+  display: none;
   align-items: center;
   justify-content: center;
   padding: 20px;
   opacity: 0;
   pointer-events: none;
-  transition: var(--transition);
+  transition: opacity 0.25s ease;
 }
 
 .cinema-modal-backdrop.open {
-  opacity: 1;
-  pointer-events: auto;
+  display: flex !important;
+  opacity: 1 !important;
+  pointer-events: auto !important;
 }
 
 .cinema-modal-box {
