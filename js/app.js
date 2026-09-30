@@ -159,6 +159,18 @@ document.addEventListener("DOMContentLoaded", async () => {
     // Merge profile
     if (source.profile) {
       merged.profile = { ...merged.profile, ...source.profile };
+      if (!merged.profile.avatarUrl && defaults.profile.avatarUrl) {
+        merged.profile.avatarUrl = defaults.profile.avatarUrl;
+      }
+      if (!merged.profile.p1 && defaults.profile.p1) {
+        merged.profile.p1 = defaults.profile.p1;
+      }
+      if (!merged.profile.p2 && defaults.profile.p2) {
+        merged.profile.p2 = defaults.profile.p2;
+      }
+      if (!merged.profile.p3 && defaults.profile.p3) {
+        merged.profile.p3 = defaults.profile.p3;
+      }
       if (source.profile.socials) {
         merged.profile.socials = { ...merged.profile.socials, ...source.profile.socials };
       }
@@ -182,7 +194,7 @@ document.addEventListener("DOMContentLoaded", async () => {
           return {
             ...defPrj,
             ...userPrj,
-            // Keep default storyline, link, and episodes if user hasn't customized them
+            thumbnail: userPrj.thumbnail || defPrj.thumbnail,
             link: userPrj.link || defPrj.link,
             storyline: userPrj.storyline || defPrj.storyline,
             episodes: (userPrj.episodes && userPrj.episodes.length > 0) ? userPrj.episodes : defPrj.episodes
