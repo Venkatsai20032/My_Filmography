@@ -191,13 +191,29 @@ document.addEventListener("DOMContentLoaded", async () => {
       merged.projects = defaults.projects.map(defPrj => {
         const userPrj = (source.projects || []).find(p => p.id === defPrj.id || p.number === defPrj.number);
         if (userPrj) {
+          // Merge episodes carefully to preserve default episode thumbnails if missing in user's cache
+          let mergedEpisodes = defPrj.episodes || [];
+          if (Array.isArray(userPrj.episodes) && userPrj.episodes.length > 0) {
+            mergedEpisodes = userPrj.episodes.map((userEp, epIdx) => {
+              const defEp = (defPrj.episodes || [])[epIdx];
+              return {
+                ...(defEp || {}),
+                ...userEp,
+                thumbnail: userEp.thumbnail || (defEp ? defEp.thumbnail : "")
+              };
+            });
+          }
+
           return {
             ...defPrj,
             ...userPrj,
+            creditType: userPrj.creditImage ? "image" : (userPrj.creditType || defPrj.creditType || "image"),
+            creditImage: userPrj.creditImage || defPrj.creditImage,
+            creditName: userPrj.creditName || defPrj.creditName,
             thumbnail: userPrj.thumbnail || defPrj.thumbnail,
             link: userPrj.link || defPrj.link,
             storyline: userPrj.storyline || defPrj.storyline,
-            episodes: (userPrj.episodes && userPrj.episodes.length > 0) ? userPrj.episodes : defPrj.episodes
+            episodes: mergedEpisodes
           };
         }
         return defPrj;
@@ -552,7 +568,9 @@ document.addEventListener("DOMContentLoaded", async () => {
 
       // Credit content
       let creditHtml = "";
-      if (prj.creditType === "image" && prj.creditImage) {
+      if (prj.creditImage && (prj.creditType === "image" || !prj.creditType)) {
+        creditHtml = `<img src="${prj.creditImage}" alt="Credit Image" class="credit-img">`;
+      } else if (prj.creditType === "image" && prj.creditImage) {
         creditHtml = `<img src="${prj.creditImage}" alt="Credit Image" class="credit-img">`;
       } else {
         creditHtml = `<span class="credit-placeholder-text">${escapeHtml(prj.creditName || "CREDIT NAME")}</span>`;
