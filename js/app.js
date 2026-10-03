@@ -199,7 +199,9 @@ document.addEventListener("DOMContentLoaded", async () => {
               return {
                 ...(defEp || {}),
                 ...userEp,
-                thumbnail: userEp.thumbnail || (defEp ? defEp.thumbnail : "")
+                thumbnail: (userEp.thumbnail && userEp.thumbnail.trim() !== "") 
+                  ? userEp.thumbnail 
+                  : (defEp?.thumbnail || `./images/project-${String(defPrj.number || '01')}-ep-${String(epIdx + 1).padStart(2, '0')}.jpg`)
               };
             });
           }
@@ -582,7 +584,12 @@ document.addEventListener("DOMContentLoaded", async () => {
         const episodesList = prj.episodes || [];
 
         // Edit Mode Episodes Markup
-        const episodesEditCards = episodesList.map((ep, epIdx) => `
+        const episodesEditCards = episodesList.map((ep, epIdx) => {
+          const epThumbnail = (ep.thumbnail && ep.thumbnail.trim() !== "") 
+            ? ep.thumbnail 
+            : `./images/project-${String(prj.number || (index + 1)).padStart(2, '0')}-ep-${String(epIdx + 1).padStart(2, '0')}.jpg`;
+
+          return `
           <div class="episode-card episode-item-row" data-ep-id="${ep.id}" data-ep-index="${epIdx}">
             <div class="episode-card-header">
               <span class="episode-badge-pill"><i class="fa-solid fa-play fa-xs"></i> Episode ${escapeHtml(ep.episodeNo || String(epIdx + 1).padStart(2, '0'))}</span>
@@ -597,14 +604,12 @@ document.addEventListener("DOMContentLoaded", async () => {
               <!-- Left: Episode Thumbnail Box -->
               <div>
                 <div class="episode-thumb-preview-box" data-action="view-episode-thumb" data-project-id="${prj.id}" data-ep-index="${epIdx}" title="Click to view image">
-                  ${ep.thumbnail 
-                    ? `<img src="${ep.thumbnail}" alt="Episode ${ep.episodeNo}" class="episode-thumb-img">`
-                    : `<span style="font-size:0.8rem; color:var(--text-muted);"><i class="fa-solid fa-image"></i> Poster / Thumbnail</span>`
-                  }
+                  <img src="${epThumbnail}" alt="Episode ${ep.episodeNo}" class="episode-thumb-img" onerror="this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.style.display='flex';">
+                  <span style="display:none; font-size:0.8rem; color:var(--text-muted);"><i class="fa-solid fa-image"></i> Poster / Thumbnail</span>
                 </div>
                 <div style="display:flex; flex-direction:column; gap:4px; margin-top:6px;">
                   <input type="file" accept="image/*" class="cinema-input episode-thumb-file" data-project-id="${prj.id}" data-ep-index="${epIdx}" style="font-size:0.72rem; padding:4px;">
-                  <input type="url" class="cinema-input episode-thumb-url" data-project-id="${prj.id}" data-ep-index="${epIdx}" placeholder="Or Poster URL..." value="${escapeHtml(ep.thumbnail || '')}" style="font-size:0.72rem;">
+                  <input type="url" class="cinema-input episode-thumb-url" data-project-id="${prj.id}" data-ep-index="${epIdx}" placeholder="Or Poster URL..." value="${escapeHtml(ep.thumbnail || epThumbnail || '')}" style="font-size:0.72rem;">
                 </div>
               </div>
 
@@ -642,16 +647,20 @@ document.addEventListener("DOMContentLoaded", async () => {
               </div>
             </div>
           </div>
-        `).join("");
+        `;
+        }).join("");
 
         // View Mode Episodes Markup
-        const episodesViewCards = episodesList.map((ep, epIdx) => `
+        const episodesViewCards = episodesList.map((ep, epIdx) => {
+          const epThumbnail = (ep.thumbnail && ep.thumbnail.trim() !== "") 
+            ? ep.thumbnail 
+            : `./images/project-${String(prj.number || (index + 1)).padStart(2, '0')}-ep-${String(epIdx + 1).padStart(2, '0')}.jpg`;
+
+          return `
           <div class="episode-showcase-card">
             <div class="episode-showcase-thumb-wrap">
-              ${ep.thumbnail 
-                ? `<img src="${ep.thumbnail}" alt="Episode ${ep.episodeNo}">`
-                : `<div style="width:100%; height:100%; display:flex; align-items:center; justify-content:center; color:var(--text-muted); font-size:1rem;"><i class="fa-solid fa-clapperboard fa-2x"></i></div>`
-              }
+              <img src="${epThumbnail}" alt="Episode ${escapeHtml(ep.episodeNo || '')}" onerror="this.style.display='none'; if(this.nextElementSibling) this.nextElementSibling.style.display='flex';">
+              <div style="display:none; width:100%; height:100%; align-items:center; justify-content:center; color:var(--text-muted); font-size:1rem;"><i class="fa-solid fa-clapperboard fa-2x"></i></div>
               ${ep.link ? `
                 <a href="${escapeHtml(ep.link)}" target="_blank" rel="noopener noreferrer" class="episode-showcase-play-overlay" title="Watch Episode">
                   <i class="fa-solid fa-play"></i>
@@ -672,7 +681,8 @@ document.addEventListener("DOMContentLoaded", async () => {
               ` : ''}
             </div>
           </div>
-        `).join("");
+        `;
+        }).join("");
 
         episodesHtml = `
           <div class="episodes-section-wrap">

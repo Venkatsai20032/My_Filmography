@@ -117,7 +117,7 @@ export const DEFAULT_PORTFOLIO_DATA = {
           storyline: "A 5-episode rom-com about a B.Tech student working as a food delivery agent who unexpectedly meets an IT employee. Connected later through a dating app, they begin an unusual journey of love, care, fights, misunderstandings, twists, comedy and emotional moments.",
           link: "https://youtu.be/DxmRcukX29g?si=PG2Ax39-knPwrn1v",
           releaseYear: "2026",
-          thumbnail: ""
+          thumbnail: "./images/project-01-ep-01.jpg"
         },
         {
           id: "ep-01-2",
@@ -128,7 +128,7 @@ export const DEFAULT_PORTFOLIO_DATA = {
           storyline: "The story progresses as the bond grows with hilarious and heartwarming flat-sharing moments.",
           link: "https://youtu.be/6Lxo2ZKDP3s?si=t1vGOQ8rt4-O0yzc",
           releaseYear: "2026",
-          thumbnail: ""
+          thumbnail: "./images/project-01-ep-02.jpg"
         },
         {
           id: "ep-01-3",
@@ -139,7 +139,7 @@ export const DEFAULT_PORTFOLIO_DATA = {
           storyline: "Navigating misunderstandings, unexpected care, and the deep emotional connection forming between them.",
           link: "https://youtu.be/xYpfSohybxQ?si=rTs5PmmsaSRXTSry",
           releaseYear: "2026",
-          thumbnail: ""
+          thumbnail: "./images/project-01-ep-03.jpg"
         },
         {
           id: "ep-01-4",
@@ -150,7 +150,7 @@ export const DEFAULT_PORTFOLIO_DATA = {
           storyline: "Romantic turns, comedic situations, and pivotal moments leading up to the series climax.",
           link: "https://youtu.be/F-atekQasEA?si=EEgHbNM0wnVrun6f",
           releaseYear: "2026",
-          thumbnail: ""
+          thumbnail: "./images/project-01-ep-04.jpg"
         },
         {
           id: "ep-01-5",
@@ -161,7 +161,7 @@ export const DEFAULT_PORTFOLIO_DATA = {
           storyline: "The emotional and heartwarming series finale bringing the journey to its memorable conclusion.",
           link: "https://youtu.be/ypmuxbHagv8?si=NvVlM3A9r0Pb9jQp",
           releaseYear: "2026",
-          thumbnail: ""
+          thumbnail: "./images/project-01-ep-05.jpg"
         }
       ]
     },
